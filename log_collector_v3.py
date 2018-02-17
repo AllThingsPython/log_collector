@@ -118,7 +118,7 @@ def file_list_generator(start_ts, end_ts, source_folder_path):				# Generate lis
 	tmpfile_2_read.close()
 
 	
-def copy_files():					# Copy files to location mentioned by user
+def copy_files(source_folder_path, destination_folder_path):				# Copy files to location mentioned by user
 	pass
 
 def main():						# Main function
