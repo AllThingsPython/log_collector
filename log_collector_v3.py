@@ -131,6 +131,12 @@ def main():								# Main function
 	if len(sys.argv[1:]) == 0:
 
 		parser.print_help()
+		print """
+Example:
+./log_collector_v3.py --start_date 20/01 --start_time 16:00 --end_date 01/02 --end_time 13:00 --source_folder /home/user1/test_folder_1 --dest_folder /home/user1/folder_2
+
+"""
+
 		sys.exit(1)
 
 	input_checker(options.start_date, options.start_time)
