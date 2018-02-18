@@ -2,22 +2,6 @@
 
 import sys, os, subprocess, optparse, re, shutil
 
-def printHelpMsg():
-
-	print """
-Usage: 0602.py [options]
-
-Options:
--h, --help            show this help message and exit
---start_date= start date
---start_time= start time
---end_date= end date
---end_time= end time
---source_folder= source_folder
---dest_folder= destination folder
-"""
-
-
 def input_checker(input_date, input_time):		# Validate user input
 
 	day = input_date.split("/")[0]
@@ -136,7 +120,7 @@ def main():						# Main function
 
 	if len(sys.argv[1:]) == 0:
 
-		printHelpMsg()
+		parser.print_help()
 		sys.exit(1)
 
 	input_checker(options.start_date, options.start_time)
