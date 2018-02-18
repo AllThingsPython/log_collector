@@ -2,7 +2,7 @@
 
 import sys, os, subprocess, optparse, re, shutil
 
-def input_checker(input_date, input_time):		# Validate user input
+def input_checker(input_date, input_time):				# Validate user input
 
 	day = input_date.split("/")[0]
 	month = input_date.split("/")[1]
@@ -21,7 +21,7 @@ def input_checker(input_date, input_time):		# Validate user input
                 print "Invalid time\n"
                 sys.exit(1)
 
-def timestamp_generator(input_date, input_time):	# Generate numerical timestamp value	
+def timestamp_generator(input_date, input_time):			# Generate numerical timestamp value	
 
 	if int(input_date.split("/")[1]) < 10:
 
@@ -35,7 +35,7 @@ def timestamp_generator(input_date, input_time):	# Generate numerical timestamp 
 
 	return ts
 
-def file_list_generator(start_ts, end_ts, source_folder_path):				# Generate list of files to be copied
+def file_list_generator(start_ts, end_ts, source_folder_path):		# Generate list of files to be copied
 	
 	month_dict = {'Jan': '1', 'Feb': '2', 'Mar': '3', 'Apr': '4', 'May': '5', 'Jun': '6', 'Jul': '7', 'Aug': '8', 'Sep': '9', 'Oct': '10', 'Nov':'11', 'Dec': '12'}
 
@@ -102,10 +102,20 @@ def file_list_generator(start_ts, end_ts, source_folder_path):				# Generate lis
 	tmpfile_2_read.close()
 
 	
-def copy_files(source_folder_path, destination_folder_path):				# Copy files to location mentioned by user
-	pass
+def copy_files(source_folder_path, destination_folder_path):		# Copy files to location mentioned by user
 
-def main():						# Main function
+	os.chdir(source_folder_path)
+
+	file_list = open('/tmp/file_list', 'r')
+
+	for file in file_list:
+
+		shutil.copy2(file.rstrip(), destination_folder_path)
+
+	file_list.close()
+
+
+def main():								# Main function
 
         parser = optparse.OptionParser()
 
@@ -131,19 +141,10 @@ def main():						# Main function
 
 	end_timestamp = timestamp_generator(options.end_date, options.end_time)
 
-	print start_timestamp, " ", end_timestamp
-
 	file_list_generator(start_timestamp, end_timestamp, options.source_folder)
 
-	os.chdir(options.source_folder)
+	copy_files(options.source_folder, options.dest_folder)
 
-	file_list = open('/tmp/file_list', 'r')
-
-	for file in file_list:
-
-		shutil.copy2(file.rstrip(), options.dest_folder)
-
-	file_list.close()
 
 main()
 
