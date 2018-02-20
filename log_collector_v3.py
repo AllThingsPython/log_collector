@@ -2,7 +2,7 @@
 
 import sys, os, subprocess, optparse, re, shutil
 
-def input_checker(input_date, input_time):				# Validate user input
+def date_and_time_checker(input_date, input_time):			# Validate user input
 
 	day = input_date.split("/")[0]
 	month = input_date.split("/")[1]
@@ -21,6 +21,33 @@ def input_checker(input_date, input_time):				# Validate user input
                 print "Invalid time\n"
                 sys.exit(1)
 
+
+def folder_checker(source_folder, destination_folder):
+
+	if not os.access(source_folder, os.F_OK):
+
+		print "\n{} folder does not exist\n".format(source_folder)
+
+		sys.exit(1)
+
+	if not os.access(source_folder, os.R_OK):
+
+		print "\n{} folder does not have read permissions\n".format(source_folder)
+
+		sys.exit(1)
+
+	if not os.access(destination_folder, os.F_OK):
+
+		os.mkdir(destination_folder)
+
+		
+	if not os.access(destination_folder, os.W_OK) and not os.access(destination_folder, os.X_OK):
+
+		print "\n{} folder does not have write and execute permissions\n".format(destination_folder)
+
+		sys.exit(1)
+
+
 def timestamp_generator(input_date, input_time):			# Generate numerical timestamp value	
 
 	if int(input_date.split("/")[1]) < 10:
@@ -34,6 +61,7 @@ def timestamp_generator(input_date, input_time):			# Generate numerical timestam
 	ts = month + day + input_time.split(":")[0] + input_time.split(":")[1]
 
 	return ts
+
 
 def file_list_generator(start_ts, end_ts, source_folder_path):		# Generate list of files to be copied
 	
@@ -139,9 +167,11 @@ Example:
 
 		sys.exit(1)
 
-	input_checker(options.start_date, options.start_time)
+	date_and_time_checker(options.start_date, options.start_time)
 
-	input_checker(options.end_date, options.end_time)
+	date_and_time_checker(options.end_date, options.end_time)
+
+	folder_checker(options.source_folder, options.dest_folder)
 
 	start_timestamp = timestamp_generator(options.start_date, options.start_time)
 
