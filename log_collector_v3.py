@@ -22,7 +22,7 @@ def date_and_time_checker(input_date, input_time):			# Validate user input
                 sys.exit(1)
 
 
-def folder_checker(source_folder, destination_folder):
+def folder_checker(source_folder, destination_folder):			# Vaidate source and destination folders
 
 	if not os.access(source_folder, os.F_OK):
 
