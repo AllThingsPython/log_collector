@@ -177,6 +177,8 @@ def main():								# Main function
 Example:
 ./log_collector_v3.py --start_date 20/01 --start_time 16:00 --end_date 01/02 --end_time 13:00 --source_folder /home/user1/test_folder_1 --dest_folder /home/user1/folder_2
 
+./log_collector_v3.py --start_date 20/01 --start_time 16:00 --end_date 01/02 --end_time 13:00 --source_folder /home/user1/test_folder_1 --dest_folder /home/user1/folder_2 --pattern '\"\\bYOUR_PATTERN_\"'
+
 """
 
 		sys.exit(1)
