@@ -22,7 +22,7 @@ def date_and_time_checker(input_date, input_time):			# Validate user input
                 sys.exit(1)
 
 
-def folder_checker(source_folder, destination_folder):			# Vaidate source and destination folders
+def folder_checker(source_folder, destination_folder):			# Validate source and destination folders
 
 	if not os.access(source_folder, os.F_OK):
 
@@ -63,7 +63,7 @@ def timestamp_generator(input_date, input_time):			# Generate numerical timestam
 	return ts
 
 
-def file_list_generator(start_ts, end_ts, source_folder_path):		# Generate list of files to be copied
+def file_list_generator(start_ts, end_ts, source_folder_path, pattern):		# Generate list of files to be copied
 	
 	month_dict = {'Jan': '1', 'Feb': '2', 'Mar': '3', 'Apr': '4', 'May': '5', 'Jun': '6', 'Jul': '7', 'Aug': '8', 'Sep': '9', 'Oct': '10', 'Nov':'11', 'Dec': '12'}
 
@@ -73,9 +73,20 @@ def file_list_generator(start_ts, end_ts, source_folder_path):		# Generate list 
 
 	os.chdir(source_folder_path)
 
-	subprocess.call('ls -ltra', stdout=tmpfile_write, shell=True)
+	if pattern is not None:
+
+		status_code = subprocess.call('ls -ltra | egrep ' + pattern, stdout=tmpfile_write, shell=True)
+	else:
+
+		status_code =  subprocess.call('ls -ltra', stdout=tmpfile_write, shell=True) 
 
 	tmpfile_write.close()
+
+	if status_code != 0:
+		
+		print "\nNo files matching the pattern you specified\n"
+		sys.exit(1)
+		
 
 	###
 
@@ -83,7 +94,9 @@ def file_list_generator(start_ts, end_ts, source_folder_path):		# Generate list 
 
 	tmpfile_read = open('/tmp/' + tmpfile, 'r')
 
-	tmpfile_read.next()
+	if pattern is None:
+
+		tmpfile_read.next()		# To remove line containing word "total" in output of ls -ltra
 
 	tmpfile_2_write = open('/tmp/' + tmpfile_2, 'w')
 
@@ -153,6 +166,7 @@ def main():								# Main function
 	parser.add_option('--end_time', dest="end_time", metavar=' end time')
 	parser.add_option('--source_folder', dest="source_folder", metavar=' source_folder')
 	parser.add_option('--dest_folder', dest="dest_folder", metavar=' destination folder')
+	parser.add_option('--pattern', dest="pattern", metavar=' pattern (Will be treated as an ERE)')
 
 	options, remainder = parser.parse_args()
 
@@ -177,7 +191,7 @@ Example:
 
 	end_timestamp = timestamp_generator(options.end_date, options.end_time)
 
-	file_list_generator(start_timestamp, end_timestamp, options.source_folder)
+	file_list_generator(start_timestamp, end_timestamp, options.source_folder, options.pattern)
 
 	copy_files(options.source_folder, options.dest_folder)
 
