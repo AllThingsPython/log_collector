@@ -2,6 +2,13 @@
 
 import sys, os, subprocess, optparse, re, shutil
 
+tmpfile = 'tmpfile_' + str(os.getpid())
+
+tmpfile_2 = 'tmpfile_2_' + str(os.getpid())
+
+tmp_file_list = 'file_list_' + str(os.getpid())
+
+
 def date_and_time_checker(input_date, input_time):			# Validate user input
 
 	day = input_date.split("/")[0]
@@ -67,8 +74,6 @@ def file_list_generator(start_ts, end_ts, source_folder_path, pattern):		# Gener
 	
 	month_dict = {'Jan': '1', 'Feb': '2', 'Mar': '3', 'Apr': '4', 'May': '5', 'Jun': '6', 'Jul': '7', 'Aug': '8', 'Sep': '9', 'Oct': '10', 'Nov':'11', 'Dec': '12'}
 
-	tmpfile = 'tmpfile_' + str(os.getpid())
-
 	tmpfile_write = open('/tmp/' + tmpfile, 'w')
 
 	os.chdir(source_folder_path)
@@ -89,8 +94,6 @@ def file_list_generator(start_ts, end_ts, source_folder_path, pattern):		# Gener
 		
 
 	###
-
-	tmpfile_2 = 'tmpfile_2_' + str(os.getpid())
 
 	tmpfile_read = open('/tmp/' + tmpfile, 'r')
 
@@ -126,7 +129,7 @@ def file_list_generator(start_ts, end_ts, source_folder_path, pattern):		# Gener
 
 	tmpfile_2_read = open('/tmp/' + tmpfile_2, 'r')
 
-	file_list = open('/tmp/file_list', 'w')
+	file_list = open('/tmp/' + tmp_file_list, 'w')
 
 	for line in tmpfile_2_read:
 
@@ -147,7 +150,7 @@ def copy_files(source_folder_path, destination_folder_path):		# Copy files to lo
 
 	os.chdir(source_folder_path)
 
-	file_list = open('/tmp/file_list', 'r')
+	file_list = open('/tmp/' + tmp_file_list, 'r')
 
 	for file in file_list:
 
@@ -155,6 +158,11 @@ def copy_files(source_folder_path, destination_folder_path):		# Copy files to lo
 
 	file_list.close()
 
+def delete_tmp_files():
+
+	os.remove('/tmp/' + tmpfile)
+	os.remove('/tmp/' + tmpfile_2)
+	os.remove('/tmp/' + tmp_file_list)
 
 def main():								# Main function
 
@@ -196,6 +204,8 @@ Example:
 	file_list_generator(start_timestamp, end_timestamp, options.source_folder, options.pattern)
 
 	copy_files(options.source_folder, options.dest_folder)
+
+	delete_tmp_files()
 
 
 main()
