@@ -1,5 +1,6 @@
 #! /usr/bin/env python
 
+from datetime import datetime
 import sys, os, subprocess, optparse, re, shutil
 
 tmpfile = 'tmpfile_' + str(os.getpid())
@@ -162,6 +163,19 @@ def copy_files(source_folder_path, destination_folder_path):		# Copy files to lo
 
 	file_list.close()
 
+def zip_and_delete(destination_folder_path):
+
+	os.chdir("/tmp")
+
+	ts = (datetime.now()).strftime("%d_%m_%Y_%H_%M_%S")
+	zip_file_name = "logs_" + ts
+
+	subprocess.call("zip -r {} {} >/dev/null".format(zip_file_name, destination_folder_path), shell=True)
+
+	print "\n	==========> Logs saved to {}\n".format("/tmp/" + zip_file_name + ".zip")
+
+	shutil.rmtree(destination_folder_path)
+
 def delete_tmp_files():
 
 	os.remove('/tmp/' + tmpfile)
@@ -208,6 +222,8 @@ Example:
 	file_list_generator(start_timestamp, end_timestamp, options.source_folder, options.pattern)
 
 	copy_files(options.source_folder, options.dest_folder)
+
+	zip_and_delete(options.dest_folder)
 
 	delete_tmp_files()
 
