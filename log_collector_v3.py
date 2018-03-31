@@ -152,7 +152,11 @@ def copy_files(source_folder_path, destination_folder_path):		# Copy files to lo
 
 	file_list = open('/tmp/' + tmp_file_list, 'r')
 
+	print "\nFollowing files are being copied\n"
+
 	for file in file_list:
+
+		print file,
 
 		shutil.copy2(file.rstrip(), destination_folder_path)
 
