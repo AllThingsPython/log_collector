@@ -186,10 +186,10 @@ def main():								# Main function
 
         parser = optparse.OptionParser()
 
-	parser.add_option('--start_date', dest="start_date", metavar=' start date')
-	parser.add_option('--start_time', dest="start_time", metavar=' start time')
-	parser.add_option('--end_date', dest="end_date", metavar=' end date')
-	parser.add_option('--end_time', dest="end_time", metavar=' end time')
+	parser.add_option('--start_date', dest="start_date", metavar=' start date [DD:MM]')
+	parser.add_option('--start_time', dest="start_time", metavar=' start time [hh:mm]')
+	parser.add_option('--end_date', dest="end_date", metavar=' end date [DD:MM]')
+	parser.add_option('--end_time', dest="end_time", metavar=' end time [hh:mm]')
 	parser.add_option('--source_folder', dest="source_folder", metavar=' source_folder')
 	parser.add_option('--dest_folder', dest="dest_folder", metavar=' destination folder')
 	parser.add_option('--pattern', dest="pattern", metavar=' pattern (Will be treated as an ERE)')
